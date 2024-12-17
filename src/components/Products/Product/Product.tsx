@@ -1,11 +1,9 @@
-import { KeyboardEvent } from 'react';
-
+import { KeyboardEvent, useEffect } from 'react';
 import formatPrice from 'utils/formatPrice';
 import { IProduct } from 'models';
-
 import { useCart } from 'contexts/cart-context';
-
 import * as S from './style';
+import rudderanalytics from '../../../utils/rudderstack';  // Add this line
 
 interface IProps {
   product: IProduct;
@@ -22,6 +20,18 @@ const Product = ({ product }: IProps) => {
     currencyFormat,
     isFreeShipping,
   } = product;
+
+  // Add this useEffect to track product views
+  useEffect(() => {
+    rudderanalytics.track('Product Viewed', {
+      product_id: sku,
+      name: title,
+      price: price,
+      currency: currencyId,
+      currency_format: currencyFormat,
+      has_free_shipping: isFreeShipping
+    });
+  }, []);
 
   const formattedPrice = formatPrice(price, currencyId);
   let productInstallment;
@@ -41,6 +51,18 @@ const Product = ({ product }: IProps) => {
   }
 
   const handleAddProduct = () => {
+
+    // Add RudderStack tracking
+    rudderanalytics.track('Product Added', {
+      product_id: sku,
+      name: title,
+      price: price,
+      currency: currencyId,
+      currency_format: currencyFormat,
+      quantity: 1,
+      has_free_shipping: isFreeShipping
+    });
+
     addProduct({ ...product, quantity: 1 });
     openCart();
   };
