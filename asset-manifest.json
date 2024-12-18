@@ -1,7 +1,6 @@
 {
   "files": {
-    "main.js": "/react-shopping-cart/static/js/main.49d256ce.js",
-    "static/media/jeremy-akeze-doghouse-it-recruitment.jpg": "/react-shopping-cart/static/media/jeremy-akeze-doghouse-it-recruitment.663cfeb6f48038ec1198.jpg",
+    "main.js": "/react-shopping-cart/static/js/main.91c4aba8.js",
     "static/media/-1-product.webp": "/react-shopping-cart/static/media/10686354557628304-1-product.00bf8ca2603352e0cfad.webp",
     "static/media/876661122392077-1-product.webp": "/react-shopping-cart/static/media/876661122392077-1-product.8c566b01d48c7b6964f0.webp",
     "static/media/-2-product.webp": "/react-shopping-cart/static/media/18532669286405344-2-product.783be0ba5d624b65b697.webp",
@@ -9,9 +8,9 @@
     "static/media/-1-cart.webp": "/react-shopping-cart/static/media/10686354557628304-1-cart.db808de9790b1faa0c7b.webp",
     "static/media/876661122392077-1-cart.webp": "/react-shopping-cart/static/media/876661122392077-1-cart.f8dd87bd515537dd31d6.webp",
     "index.html": "/react-shopping-cart/index.html",
-    "main.49d256ce.js.map": "/react-shopping-cart/static/js/main.49d256ce.js.map"
+    "main.91c4aba8.js.map": "/react-shopping-cart/static/js/main.91c4aba8.js.map"
   },
   "entrypoints": [
-    "static/js/main.49d256ce.js"
+    "static/js/main.91c4aba8.js"
   ]
 }
