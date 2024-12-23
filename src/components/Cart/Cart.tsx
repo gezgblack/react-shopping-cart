@@ -1,6 +1,6 @@
 import formatPrice from 'utils/formatPrice';
 import CartProducts from './CartProducts';
-
+import rudderanalytics from '../../utils/rudderstack'; // Add this import
 import { useCart } from 'contexts/cart-context';
 
 import * as S from './style';
@@ -10,6 +10,28 @@ const Cart = () => {
 
   const handleCheckout = () => {
     if (total.productQuantity) {
+
+
+      const orderId = `order_${Date.now()}`;
+
+      // Modified tracking call with proper type handling
+      rudderanalytics.track('Checkout Completed', {
+        order_id: String(orderId),         // Ensure string
+        revenue: Number(total.totalPrice), // Ensure number
+        currency: String(total.currencyId),
+        currency_format: String(total.currencyFormat),
+        products: products.map(product => ({
+          product_id: String(product.sku), // Convert to string
+          name: String(product.title),
+          price: Number(product.price),
+          quantity: Number(product.quantity),
+          currency: String(total.currencyId),
+          currency_format: String(total.currencyFormat)
+        })),
+        total_quantity: Number(total.productQuantity),
+        installments: total.installments ? Number(total.installments) : undefined // Use undefined instead of null
+      });
+
       alert(
         `Checkout - Subtotal: ${total.currencyFormat} ${formatPrice(
           total.totalPrice,
