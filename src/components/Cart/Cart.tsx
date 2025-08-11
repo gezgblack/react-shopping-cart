@@ -1,6 +1,6 @@
 import formatPrice from 'utils/formatPrice';
 import CartProducts from './CartProducts';
-import rudderanalytics from '../../utils/rudderstack'; // Add this import
+import posthog from '../utils/posthog'; // Add PostHog import
 import { useCart } from 'contexts/cart-context';
 
 import * as S from './style';
@@ -10,26 +10,34 @@ const Cart = () => {
 
   const handleCheckout = () => {
     if (total.productQuantity) {
-
-
       const orderId = `order_${Date.now()}`;
 
-      // Modified tracking call with proper type handling
-      rudderanalytics.track('Checkout Completed', {
-        order_id: String(orderId),         // Ensure string
-        revenue: Number(total.totalPrice), // Ensure number
-        currency: String(total.currencyId),
-        currency_format: String(total.currencyFormat),
+      // Track with PostHog
+      posthog.capture('checkout_completed', {
+        order_id: orderId,
+        revenue: total.totalPrice,
+        currency: total.currencyId,
+        currency_format: total.currencyFormat,
         products: products.map(product => ({
-          product_id: String(product.sku), // Convert to string
-          name: String(product.title),
-          price: Number(product.price),
-          quantity: Number(product.quantity),
-          currency: String(total.currencyId),
-          currency_format: String(total.currencyFormat)
+          product_id: product.sku,
+          name: product.title,
+          price: product.price,
+          quantity: product.quantity,
         })),
-        total_quantity: Number(total.productQuantity),
-        installments: total.installments ? Number(total.installments) : undefined // Use undefined instead of null
+        total_quantity: total.productQuantity,
+        installments: total.installments || null
+      });
+
+      // Also track individual product purchases
+      products.forEach(product => {
+        posthog.capture('product_purchased', {
+          product_id: product.sku,
+          product_name: product.title,
+          price: product.price,
+          quantity: product.quantity,
+          currency: total.currencyId,
+          order_id: orderId
+        });
       });
 
       alert(
@@ -43,8 +51,17 @@ const Cart = () => {
     }
   };
 
-  const handleToggleCart = (isOpen: boolean) => () =>
-    isOpen ? closeCart() : openCart();
+  const handleToggleCart = (isOpen: boolean) => () => {
+    if (isOpen) {
+      posthog.capture('cart_closed');
+      closeCart();
+    } else {
+      posthog.capture('cart_opened', {
+        products_in_cart: total.productQuantity
+      });
+      openCart();
+    }
+  };
 
   return (
     <S.Container isOpen={isOpen}>
