@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import posthog from './utils/posthog'; // Add this import
+import posthog from '../../utils/posthog'; // Add this import
 
 import Loader from 'components/Loader';
 import { GithubCorner, GithubStarButton } from 'components/Github';

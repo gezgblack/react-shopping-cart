@@ -50,7 +50,20 @@ const Product = ({ product }: IProps) => {
     );
   }
 
-  const handleAddProduct = () => {
+  const handleProductClick = () => {
+    // Track product click
+    rudderanalytics.track('Product Clicked', {
+      product_id: sku,
+      name: title,
+      price: price,
+      currency: currencyId,
+      currency_format: currencyFormat,
+      has_free_shipping: isFreeShipping
+    });
+  };
+
+  const handleAddProduct = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent product click event from firing
 
     // Add RudderStack tracking
     rudderanalytics.track('Product Added', {
@@ -75,7 +88,7 @@ const Product = ({ product }: IProps) => {
   };
 
   return (
-    <S.Container onKeyUp={handleAddProductWhenEnter} sku={sku} tabIndex={1}>
+    <S.Container onKeyUp={handleAddProductWhenEnter} onClick={handleProductClick} sku={sku} tabIndex={1}>
       {isFreeShipping && <S.Stopper>Free shipping</S.Stopper>}
       <S.Image alt={title} />
       <S.Title>{title}</S.Title>

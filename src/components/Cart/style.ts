@@ -191,3 +191,65 @@ export const CartFooter = styled.div`
     background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
   }
 `;
+
+export const AuthButtonContainer = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 98;
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+  margin-right: 50px;
+
+  @media only screen and (min-width: ${({ theme: { breakpoints } }) =>
+      breakpoints.tablet}) {
+    margin-right: 450px;
+  }
+`;
+
+export const LoginButton = styled.button`
+  border: 0;
+  padding: 0 16px;
+  height: 50px;
+  color: #ececec;
+  background-color: ${({ theme }) => theme.colors.primary};
+  text-align: center;
+  line-height: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: filter 0.2s;
+
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => theme.colors.secondary};
+  }
+
+  &:hover {
+    filter: brightness(85%);
+  }
+`;
+
+export const LogoutButton = styled(LoginButton)`
+  gap: 6px;
+`;
+
+export const AuthButtonText = styled.span`
+  white-space: nowrap;
+`;
+
+export const LoginIcon = styled.span`
+  font-size: 18px;
+`;
+
+export const UserIcon = styled.span`
+  font-size: 18px;
+`;
+
+export const LogoutIcon = styled.span`
+  font-size: 16px;
+  opacity: 0.7;
+`;

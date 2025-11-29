@@ -1,4 +1,5 @@
 import { useProducts } from 'contexts/products-context';
+import rudderanalytics from '../../utils/rudderstack';
 
 import * as S from './style';
 
@@ -10,13 +11,24 @@ const Filter = () => {
   const selectedCheckboxes = new Set(filters);
 
   const toggleCheckbox = (label: string) => {
-    if (selectedCheckboxes.has(label)) {
+    const wasSelected = selectedCheckboxes.has(label);
+    const filterAction = wasSelected ? 'removed' : 'added';
+    
+    if (wasSelected) {
       selectedCheckboxes.delete(label);
     } else {
       selectedCheckboxes.add(label);
     }
 
     const filters = Array.from(selectedCheckboxes) as [];
+
+    // Track filter applied with RudderStack
+    rudderanalytics.track('Filter Applied', {
+      filter_type: 'size',
+      filter_value: label,
+      active_filters: filters,
+      filter_action: filterAction
+    });
 
     filterProducts(filters);
   };

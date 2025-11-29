@@ -2,6 +2,7 @@ import formatPrice from 'utils/formatPrice';
 import { ICartProduct } from 'models';
 
 import { useCart } from 'contexts/cart-context';
+import rudderanalytics from '../../../../utils/rudderstack';
 
 import * as S from './style';
 
@@ -22,9 +23,53 @@ const CartProduct = ({ product }: IProps) => {
     quantity,
   } = product;
 
-  const handleRemoveProduct = () => removeProduct(product);
-  const handleIncreaseProductQuantity = () => increaseProductQuantity(product);
-  const handleDecreaseProductQuantity = () => decreaseProductQuantity(product);
+  const handleRemoveProduct = () => {
+    // Track product removed
+    rudderanalytics.track('Product Removed', {
+      product_id: sku,
+      name: title,
+      price: price,
+      currency: currencyId,
+      currency_format: currencyFormat,
+      quantity: quantity,
+      value: price * quantity
+    });
+    removeProduct(product);
+  };
+
+  const handleIncreaseProductQuantity = () => {
+    const newQuantity = quantity + 1;
+    // Track quantity updated
+    rudderanalytics.track('Product Quantity Updated', {
+      product_id: sku,
+      name: title,
+      price: price,
+      currency: currencyId,
+      currency_format: currencyFormat,
+      old_quantity: quantity,
+      new_quantity: newQuantity,
+      value: price * newQuantity
+    });
+    increaseProductQuantity(product);
+  };
+
+  const handleDecreaseProductQuantity = () => {
+    if (quantity > 1) {
+      const newQuantity = quantity - 1;
+      // Track quantity updated
+      rudderanalytics.track('Product Quantity Updated', {
+        product_id: sku,
+        name: title,
+        price: price,
+        currency: currencyId,
+        currency_format: currencyFormat,
+        old_quantity: quantity,
+        new_quantity: newQuantity,
+        value: price * newQuantity
+      });
+      decreaseProductQuantity(product);
+    }
+  };
 
   return (
     <S.Container>
