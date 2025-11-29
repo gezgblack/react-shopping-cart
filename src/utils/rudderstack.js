@@ -1,7 +1,7 @@
 import * as rudderanalytics from 'rudder-sdk-js';
 
 rudderanalytics.load(
-  '2qcKxjVX6xyzOXnDE6j6fCnFHsh',
+  '369CwDwHPldEnGQltBxz2hNtzme',
   'https://shamildemzlfpr.dataplane.rudderstack.com'
 );
 
