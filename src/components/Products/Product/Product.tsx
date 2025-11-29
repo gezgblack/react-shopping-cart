@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect } from 'react';
+import { KeyboardEvent } from 'react';
 import formatPrice from 'utils/formatPrice';
 import { IProduct } from 'models';
 import { useCart } from 'contexts/cart-context';
@@ -21,18 +21,6 @@ const Product = ({ product }: IProps) => {
     isFreeShipping,
   } = product;
 
-  // Add this useEffect to track product views
-  useEffect(() => {
-    rudderanalytics.track('Product Viewed', {
-      product_id: sku,
-      name: title,
-      price: price,
-      currency: currencyId,
-      currency_format: currencyFormat,
-      has_free_shipping: isFreeShipping
-    });
-  }, []);
-
   const formattedPrice = formatPrice(price, currencyId);
   let productInstallment;
 
@@ -51,6 +39,16 @@ const Product = ({ product }: IProps) => {
   }
 
   const handleProductClick = () => {
+    // Track product viewed when clicked
+    rudderanalytics.track('Product Viewed', {
+      product_id: sku,
+      name: title,
+      price: price,
+      currency: currencyId,
+      currency_format: currencyFormat,
+      has_free_shipping: isFreeShipping
+    });
+
     // Track product click
     rudderanalytics.track('Product Clicked', {
       product_id: sku,
